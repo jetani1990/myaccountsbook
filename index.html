@@ -20,9 +20,16 @@
       color: white;
       padding: 40px 16px;
     }
-    h1 { font-size: clamp(30px,6vw,54px); margin: 0 0 12px; }
+    h1 {
+      font-size: clamp(30px,6vw,54px);
+      margin: 0 0 12px;
+    }
     header p { font-size: 20px; }
-    main { max-width: 1200px; margin: auto; padding: 25px 15px; }
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 25px 15px;
+    }
     .banner {
       width: 100%;
       border-radius: 16px;
@@ -51,8 +58,14 @@
       text-decoration: none;
       font-weight: bold;
       margin: 20px;
+      box-shadow: 0 4px 12px #0756c944;
     }
-    footer { background: #052c70; color: white; padding: 25px; }
+    .download:hover { background: #003b91; }
+    footer {
+      background: #052c70;
+      color: white;
+      padding: 25px;
+    }
   </style>
 </head>
 <body>
@@ -60,10 +73,13 @@
     <h1>My Accounts Book</h1>
     <p>Simple, Secure and Reliable</p>
   </header>
+
   <main>
-    <h2><h3>Organize Cash, Bank And Ledger Accounts In One App.</h3></h2>
+    <h2>Organize Cash, Bank And Ledger Accounts In One App.</h2>
+
     <img class="banner" src="banner1.png" alt="My Accounts Book features">
     <img class="banner" src="banner2.png" alt="Accounting app screens">
+
     <h2>App Features</h2>
     <div class="features">
       <div class="feature">Cash Accounts</div>
@@ -74,9 +90,17 @@
       <div class="feature">Reports & Export</div>
       <div class="feature">Backup & Restore</div>
     </div>
+
     <p>Manage Your Accounts Easily From Your Mobile.</p>
-    <!-- Add the verified Google Play URL here later -->
+
+    <a class="download"
+       href="https://play.google.com/store/apps/details?id=com.myaccountsbook.app"
+       target="_blank"
+       rel="noopener noreferrer">
+      ▶ Download on Google Play
+    </a>
   </main>
+
   <footer>
     <p>My Accounts Book - Official Website</p>
     <p>&copy; 2026 My Accounts Book</p>
