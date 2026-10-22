@@ -67,6 +67,52 @@
       padding: 25px;
     }
   </style>
+  
+/* Automatic Banner Slider */
+.banner-slider {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  margin: 20px auto;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px #002c6222;
+}
+
+.banner-slider .slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  animation: bannerFade 8s infinite;
+}
+
+.banner-slider .slide1 {
+  animation-delay: 0s;
+}
+
+.banner-slider .slide2 {
+  animation-delay: -4s;
+}
+
+@keyframes bannerFade {
+  0%, 45% { opacity: 1; }
+  50%, 95% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner-slider .slide {
+    animation: none;
+  }
+  .banner-slider .slide1 {
+    opacity: 1;
+  }
+}
+
 </head>
 <body>
   <header>
