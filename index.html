@@ -8,7 +8,9 @@
   <title>My Accounts Book | Official Website</title>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -29,7 +31,9 @@
       margin: 0 0 12px;
     }
 
-    header p { font-size: 20px; }
+    header p {
+      font-size: 20px;
+    }
 
     main {
       max-width: 1200px;
@@ -37,14 +41,16 @@
       padding: 25px 15px;
     }
 
-    h2 { margin-top: 35px; }
+    h2 {
+      margin-top: 35px;
+    }
 
-    /* Automatic Image Slider */
+    /* Banner Slider */
     .banner-slider {
       position: relative;
       width: 100%;
       aspect-ratio: 2 / 1;
-      margin: 20px auto;
+      margin: 20px auto 0;
       overflow: hidden;
       border-radius: 16px;
       box-shadow: 0 5px 20px #002c6222;
@@ -57,35 +63,51 @@
       height: 100%;
       object-fit: contain;
       opacity: 0;
-      animation: bannerFade 120s infinite;
+      transition: opacity 0.8s ease-in-out;
+      pointer-events: none;
     }
 
-    .banner-slider .slide1 {
-      animation-delay: 0s;
+    .banner-slider .slide.active {
+      opacity: 1;
     }
 
-    .banner-slider .slide2 {
-      animation-delay: -60s;
+    /* Dot Navigation */
+    .slider-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin: 15px 0 25px;
     }
 
-    @keyframes bannerFade {
-      0%, 45% { opacity: 1; }
-      50%, 95% { opacity: 0; }
-      100% { opacity: 1; }
+    .dot {
+      width: 15px;
+      height: 15px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #b5c7df;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .banner-slider .slide {
-        animation: none;
-      }
-      .banner-slider .slide1 {
-        opacity: 1;
-      }
+    .dot.active {
+      background: #0756c9;
+      transform: scale(1.2);
     }
 
+    .dot:focus-visible {
+      outline: 3px solid #003b91;
+      outline-offset: 4px;
+    }
+
+    /* App Features */
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(160px, 1fr)
+      );
       gap: 12px;
       margin: 25px 0;
     }
@@ -97,6 +119,7 @@
       font-weight: bold;
     }
 
+    /* Download Button */
     .download {
       display: inline-block;
       background: #0756c9;
@@ -118,26 +141,65 @@
       color: white;
       padding: 25px;
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      .banner-slider .slide {
+        transition: none;
+      }
+    }
   </style>
 </head>
 
 <body>
+
   <header>
     <h1>My Accounts Book</h1>
     <p>Simple, Secure and Reliable</p>
   </header>
 
   <main>
-    <h2>Organize Cash, Bank And Ledger Accounts In One App.</h2>
 
-    <div class="banner-slider">
-      <img src="banner1.png"
-           alt="My Accounts Book Banner 1"
-           class="slide slide1">
+    <h2>
+      Organize Cash, Bank And Ledger
+      Accounts In One App.
+    </h2>
 
-      <img src="banner2.png"
-           alt="My Accounts Book Banner 2"
-           class="slide slide2">
+    <!-- Two Image Slider -->
+    <div class="banner-slider" id="bannerSlider">
+
+      <img
+        src="banner1.png"
+        alt="My Accounts Book Banner 1"
+        class="slide active"
+      >
+
+      <img
+        src="banner2.png"
+        alt="My Accounts Book Banner 2"
+        class="slide"
+      >
+
+    </div>
+
+    <!-- Manual Dot Buttons -->
+    <div class="slider-dots">
+
+      <button
+        class="dot active"
+        type="button"
+        aria-label="Show banner 1"
+        aria-pressed="true"
+        onclick="showSlide(0)"
+      ></button>
+
+      <button
+        class="dot"
+        type="button"
+        aria-label="Show banner 2"
+        aria-pressed="false"
+        onclick="showSlide(1)"
+      ></button>
+
     </div>
 
     <h2>App Features</h2>
@@ -147,24 +209,83 @@
       <div class="feature">Bank Accounts</div>
       <div class="feature">Ledger Accounts</div>
       <div class="feature">Voucher Entry</div>
-      <div class="feature">Credit / Debit<br>A/c to A/c Transfer</div>
+      <div class="feature">
+        Credit / Debit<br>
+        A/c to A/c Transfer
+      </div>
       <div class="feature">Reports & Export</div>
       <div class="feature">Backup & Restore</div>
     </div>
 
-    <p>Manage Your Accounts Easily From Your Mobile.</p>
+    <p>
+      Manage Your Accounts Easily
+      From Your Mobile.
+    </p>
 
-    <a class="download"
-       href="https://play.google.com/store/apps/details?id=com.myaccountsbook.app"
-       target="_blank"
-       rel="noopener noreferrer">
+    <a
+      class="download"
+      href="https://play.google.com/store/apps/details?id=com.myaccountsbook.app"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       ▶ Download on Google Play
     </a>
+
   </main>
 
   <footer>
     <p>My Accounts Book - Official Website</p>
     <p>&copy; 2026 My Accounts Book</p>
   </footer>
+
+  <!-- Automatic 60 Second Slider -->
+  <script>
+    const slides = document.querySelectorAll(
+      ".banner-slider .slide"
+    );
+
+    const dots = document.querySelectorAll(
+      ".slider-dots .dot"
+    );
+
+    let currentSlide = 0;
+    let slideTimer;
+
+    function showSlide(index) {
+      currentSlide = index;
+
+      slides.forEach((slide, i) => {
+        slide.classList.toggle(
+          "active",
+          i === currentSlide
+        );
+      });
+
+      dots.forEach((dot, i) => {
+        const isActive = i === currentSlide;
+
+        dot.classList.toggle(
+          "active",
+          isActive
+        );
+
+        dot.setAttribute(
+          "aria-pressed",
+          String(isActive)
+        );
+      });
+
+      clearTimeout(slideTimer);
+
+      slideTimer = setTimeout(() => {
+        showSlide(
+          (currentSlide + 1) % slides.length
+        );
+      }, 60000);
+    }
+
+    showSlide(0);
+  </script>
+
 </body>
 </html>
