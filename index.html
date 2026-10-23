@@ -45,7 +45,7 @@
       margin-top: 35px;
     }
 
-    /* Banner Slider */
+    /* Image Slider */
     .banner-slider {
       position: relative;
       width: 100%;
@@ -54,6 +54,9 @@
       overflow: hidden;
       border-radius: 16px;
       box-shadow: 0 5px 20px #002c6222;
+      touch-action: pan-y;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .banner-slider .slide {
@@ -65,24 +68,25 @@
       opacity: 0;
       transition: opacity 0.8s ease-in-out;
       pointer-events: none;
+      -webkit-user-drag: none;
     }
 
     .banner-slider .slide.active {
       opacity: 1;
     }
 
-    /* Dot Navigation */
+    /* Dot Buttons */
     .slider-dots {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 12px;
-      margin: 15px 0 25px;
+      gap: 14px;
+      margin: 16px 0 25px;
     }
 
     .dot {
-      width: 15px;
-      height: 15px;
+      width: 16px;
+      height: 16px;
       padding: 0;
       border: none;
       border-radius: 50%;
@@ -119,7 +123,7 @@
       font-weight: bold;
     }
 
-    /* Download Button */
+    /* Google Play Button */
     .download {
       display: inline-block;
       background: #0756c9;
@@ -165,23 +169,27 @@
     </h2>
 
     <!-- Two Image Slider -->
-    <div class="banner-slider" id="bannerSlider">
+    <div class="banner-slider"
+         id="bannerSlider"
+         aria-label="My Accounts Book banners">
 
       <img
         src="banner1.png"
         alt="My Accounts Book Banner 1"
         class="slide active"
+        draggable="false"
       >
 
       <img
         src="banner2.png"
         alt="My Accounts Book Banner 2"
         class="slide"
+        draggable="false"
       >
 
     </div>
 
-    <!-- Manual Dot Buttons -->
+    <!-- Manual Dot Navigation -->
     <div class="slider-dots">
 
       <button
@@ -238,8 +246,10 @@
     <p>&copy; 2026 My Accounts Book</p>
   </footer>
 
-  <!-- Automatic 60 Second Slider -->
+  <!-- Slider JavaScript -->
   <script>
+    const slider = document.getElementById("bannerSlider");
+
     const slides = document.querySelectorAll(
       ".banner-slider .slide"
     );
@@ -250,40 +260,82 @@
 
     let currentSlide = 0;
     let slideTimer;
+    let touchStartX = 0;
+    let touchStartY = 0;
 
+    // Show Selected Slide
     function showSlide(index) {
-      currentSlide = index;
+      currentSlide =
+        (index + slides.length) % slides.length;
 
       slides.forEach((slide, i) => {
-        slide.classList.toggle(
-          "active",
-          i === currentSlide
-        );
+        const active = i === currentSlide;
+        slide.classList.toggle("active", active);
+        slide.setAttribute("aria-hidden", String(!active));
       });
 
       dots.forEach((dot, i) => {
-        const isActive = i === currentSlide;
+        const active = i === currentSlide;
 
-        dot.classList.toggle(
-          "active",
-          isActive
-        );
+        dot.classList.toggle("active", active);
 
         dot.setAttribute(
           "aria-pressed",
-          String(isActive)
+          String(active)
         );
       });
 
+      // Restart 60 Second Timer
       clearTimeout(slideTimer);
 
       slideTimer = setTimeout(() => {
-        showSlide(
-          (currentSlide + 1) % slides.length
-        );
+        showSlide(currentSlide + 1);
       }, 60000);
     }
 
+    // Touch Swipe Start
+    slider.addEventListener(
+      "touchstart",
+      function(event) {
+        touchStartX =
+          event.changedTouches[0].screenX;
+
+        touchStartY =
+          event.changedTouches[0].screenY;
+      },
+      { passive: true }
+    );
+
+    // Touch Swipe End
+    slider.addEventListener(
+      "touchend",
+      function(event) {
+        const touchEndX =
+          event.changedTouches[0].screenX;
+
+        const touchEndY =
+          event.changedTouches[0].screenY;
+
+        const diffX = touchEndX - touchStartX;
+        const diffY = touchEndY - touchStartY;
+
+        if (
+          Math.abs(diffX) > 50 &&
+          Math.abs(diffX) > Math.abs(diffY)
+        ) {
+          if (diffX < 0) {
+            // Swipe Left - Next Photo
+            showSlide(currentSlide + 1);
+          } else {
+            // Swipe Right - Previous Photo
+            showSlide(currentSlide - 1);
+          }
+        }
+      },
+      { passive: true }
+    );
+
+    // Start Slider
     showSlide(0);
   </script>
 
